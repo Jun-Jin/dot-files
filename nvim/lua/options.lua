@@ -5,17 +5,18 @@ local options = {
     signcolumn = "yes",
     number = true,
     expandtab = true,
-    tabstop = 4,
-    softtabstop = 4,
-    shiftwidth = 4,
+    tabstop = 2,
+    softtabstop = 2,
+    shiftwidth = 2,
     clipboard = "unnamedplus",
-    hlsearch = true,
     autoindent = true,
     splitbelow = true,
     splitright = true,
     ignorecase = true,
     smartcase = true,
     cursorline = true,
+    binary=true,
+    hlsearch = true
 }
 
 for k, v in pairs(options) do
