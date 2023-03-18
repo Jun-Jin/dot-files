@@ -1,5 +1,6 @@
 require("base")
 require("options")
+require("filetype")
 require("keymaps")
 require("plugins")
 require("colorscheme")
