@@ -1,16 +1,16 @@
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+
 local status_ok, nvim_tree = pcall(require, "nvim-tree")
 if not status_ok then
   return
 end
 
-local config_status_ok, nvim_tree_config = pcall(require, "nvim-tree.config")
-if not config_status_ok then
-  return
-end
+require('nvim-tree').setup {}
 
-local tree_cb = nvim_tree_config.nvim_tree_callback
-
-nvim_tree.setup {
+require('nvim-tree').setup {
   disable_netrw = true,
   diagnostics = {
     enable = true,
@@ -23,12 +23,6 @@ nvim_tree.setup {
   view = {
     width = 50,
     side = "right",
-    mappings = {
-      list = {
-        { key = "x", cb = tree_cb "close_node" },
-        { key = "v", cb = tree_cb "vsplit" },
-      },
-    },
   },
   actions = {
     open_file = {
