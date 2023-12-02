@@ -11,6 +11,8 @@ if has("autocmd")
 
   "sw=shiftwidth, sts=softtabstop, ts=tabstop, et=expandtabの略
   autocmd FileType javascriptreact setlocal sw=2 sts=2 ts=2
+  autocmd FileType typescriptreact setlocal sw=2 sts=2 ts=2
   autocmd FileType php        setlocal sw=4 sts=4 ts=4
+  autocmd FileType python        setlocal sw=4 sts=4 ts=4
 endif
 ]], false)
