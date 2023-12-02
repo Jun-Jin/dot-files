@@ -112,6 +112,13 @@ mason_lspconfig.setup_handlers({
         }
       }
       opts.root_dir = nvim_lsp.util.root_pattern("header.php", "package.json", "style.css", "webpack.config.js")
+    elseif server_name == "yamlls" then
+        opts.filetypes = { 'yaml' }
+        opts.settings = {
+            resolved_capabilities = {
+                document_formatting = true
+            }
+        }
     end
     opts.on_attach = function(_, bufnr)
       local bufopts = { silent = true, buffer = bufnr }
