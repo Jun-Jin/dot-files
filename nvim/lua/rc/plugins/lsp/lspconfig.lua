@@ -9,6 +9,21 @@ return {
     -- import lspconfig plugin
     local lspconfig = require("lspconfig")
 
+    vim.diagnostic.config({
+      virtual_text = false, -- disable virtual text
+      update_in_insert = true,
+      underline = true,
+      severity_sort = true,
+      float = {
+        focusable = true,
+        style = "minimal",
+        border = "rounded",
+        source = "always",
+        header = "",
+        prefix = "",
+      },
+    })
+
     -- import cmp-nvim-lsp plugin
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
@@ -130,6 +145,9 @@ return {
           },
         },
       },
+    })
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+      border = "rounded",
     })
   end,
 }
