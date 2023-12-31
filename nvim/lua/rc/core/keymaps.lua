@@ -1,4 +1,5 @@
 vim.g.mapleader = " " -- set leader key to space
+vim.g.copilot_no_tab_map = true
 
 local keymap = vim.keymap -- for conciseness
 -- Modes
