@@ -33,8 +33,6 @@ return {
           i = cmp.mapping.abort(),
           c = cmp.mapping.close(),
         }),
-        ["<Tab>"] = cmp.mapping(function() luasnip.jump(1) end, { "i", "s" }),
-        ["<S-Tab>"] = cmp.mapping(function() luasnip.jump(-1) end, { "i", "s", }),
       }),
       -- sources for autocompletion
       sources = cmp.config.sources({
