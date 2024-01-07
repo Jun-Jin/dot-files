@@ -41,9 +41,10 @@ return {
     }
 
     -- dap keymaps
+    -- should unset <F11> on MacOS
     vim.keymap.set('n', '<F5>', dap.continue)
-    vim.keymap.set('n', '<F9>', dap.step_into)
-    vim.keymap.set('n', '<F10>', dap.step_over)
+    vim.keymap.set('n', '<F10>', dap.step_into)
+    vim.keymap.set('n', '<F11>', dap.step_over)
     vim.keymap.set('n', '<F12>', dap.step_out)
     vim.keymap.set('n', '<Leader>b', dap.toggle_breakpoint)
     vim.keymap.set('n', '<Leader>B', dap.set_breakpoint)
@@ -58,20 +59,17 @@ return {
         {
           elements = {
             'scopes',
-            'breakpoints',
-            'stacks',
-            'watches',
-          },
-          size = 40,
-          position = 'right',
-        },
-        {
-          elements = {
-            'repl',
-            'console',
           },
           size = 10,
           position = 'bottom',
+        },
+        {
+          elements = {
+            'breakpoints',
+            'stacks',
+          },
+          size = 60,
+          position = 'left',
         },
       },
     })
