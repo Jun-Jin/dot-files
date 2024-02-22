@@ -69,7 +69,7 @@ return {
             'stacks',
           },
           size = 60,
-          position = 'left',
+          position = 'right',
         },
       },
     })

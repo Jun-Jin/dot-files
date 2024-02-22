@@ -13,6 +13,8 @@ opt.cursorline = true
 opt.hlsearch = true
 opt.splitbelow = true
 opt.splitright = true
+opt.listchars = 'tab:¦ ,trail:･'
+opt.scrolloff = 5
 
 -- clipboard
 opt.clipboard:append("unnamedplus") -- use system clipboard as default register

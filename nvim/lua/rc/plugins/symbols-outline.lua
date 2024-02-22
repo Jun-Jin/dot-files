@@ -1,6 +1,12 @@
 return {
   "simrat39/symbols-outline.nvim",
   event = { "BufReadPre", "BufNewFile" },
+  config = function()
+    local symbols_outline = require("symbols-outline")
+    symbols_outline.setup()
+    local keymap = vim.keymap
+    keymap.set("n", "<leader>gs", "<cmd>SymbolsOutline<CR>")
+  end,
   opts = {
     highlight_hovered_item = true,
     show_guides = true,

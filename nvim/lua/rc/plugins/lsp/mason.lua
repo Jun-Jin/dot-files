@@ -27,7 +27,7 @@ return {
       -- list of servers for mason to install
       ensure_installed = {
         "gopls",
-        "tsserver",
+        "biome",
         "html",
         "cssls",
         "lua_ls",
@@ -40,10 +40,9 @@ return {
 
     mason_tool_installer.setup({
       ensure_installed = {
-        "prettier", -- prettier formatter
         "stylua", -- lua formatter
         "pylint", -- python linter
-        "eslint_d", -- js linter
+        "biome", -- js linter
       },
     })
   end,

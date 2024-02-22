@@ -95,14 +95,14 @@ return {
       root_dir = util.root_pattern("go.work", "go.mod", ".git"),
     })
 
-    -- configure html server
-    lspconfig["html"].setup({
+    -- configure json/js/ts server
+    lspconfig["biome"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
-    -- configure typescript server with plugin
-    lspconfig["tsserver"].setup({
+    -- configure html server
+    lspconfig["html"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })

@@ -13,7 +13,7 @@ local keymap = vim.keymap -- for conciseness
 -- Personal config
 -- keymap('n', '<Space>', '<Nop>', { desc = "" })
 keymap.set('n', '<C-w><Space>', 'o<ESC>', { desc = "Add new line" })
-keymap.set('n', '<ESC><ESC>', ':nohl<CR>', { desc = "Turn off search highlight" })
+keymap.set('n', '<ESC><ESC>', ':nohl<CR>', { desc = "Turn off search highlight", silent = true })
 keymap.set('n', '~', '~h', { desc = "Don't continue" })
 
 keymap.set('i', 'jj', '<ESC>', { desc = "Escape with jj" })
