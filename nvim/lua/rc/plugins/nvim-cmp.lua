@@ -41,6 +41,7 @@ return {
         { name = "luasnip" }, -- snippets
         { name = "path" }, -- file system paths
       }),
+      preselect = cmp.PreselectMode.None, -- do not preselect any completion item
     })
   end,
 }

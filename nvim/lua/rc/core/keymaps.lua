@@ -18,3 +18,4 @@ keymap.set('n', '~', '~h', { desc = "Don't continue" })
 
 keymap.set('i', 'jj', '<ESC>', { desc = "Escape with jj" })
 keymap.set('i', 'kk', '<ESC>la', { desc = "Escape and re-enter insert mode" })
+keymap.set('i', 'zz', '<ESC>zza', { desc = "Do \"zz\" and re-enter insert mode" })
