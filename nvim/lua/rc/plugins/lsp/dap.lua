@@ -2,6 +2,7 @@ return {
   "rcarriga/nvim-dap-ui",
   dependencies = {
     "mfussenegger/nvim-dap",
+    "leoluz/nvim-dap-go"
   },
   event = "VeryLazy",
   config = function()
@@ -15,37 +16,27 @@ return {
       }
     }
 
-    -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
-    dap.configurations.go = {
-      {
-        type = "delve",
-        name = "Debug",
-        request = "launch",
-        program = "${file}"
-      },
-      {
-        type = "delve",
-        name = "Debug test", -- configuration for debugging test files
-        request = "launch",
-        mode = "test",
-        program = "${file}"
-      },
-      -- works with go.mod packages and sub packages 
-      {
-        type = "delve",
-        name = "Debug test (go.mod)",
-        request = "launch",
-        mode = "test",
-        program = "./${relativeFileDirname}"
-      } 
-    }
+    local dap_go = require("dap-go")
+    dap_go.setup({
+      dap_configurations = {
+        {
+          -- Must be "go" or it will be ignored by the plugin
+          type = "go",
+          name = "Debug test (go.mod)",
+          request = "launch",
+          mode = "test",
+          program = "./${relativeFileDirname}",
+          buildFlags = {"-gcflags", "-N -l"}, -- Add build flags here
+        },
+      }
+    })
 
     -- dap keymaps
     -- should unset <F11> on MacOS
     vim.keymap.set('n', '<F5>', dap.continue)
     vim.keymap.set('n', '<Leader><Esc>', dap.disconnect)
-    vim.keymap.set('n', '<F10>', dap.step_into)
-    vim.keymap.set('n', '<F11>', dap.step_over)
+    vim.keymap.set('n', '<F10>', dap.step_over)
+    vim.keymap.set('n', '<F11>', dap.step_into)
     vim.keymap.set('n', '<F12>', dap.step_out)
     vim.keymap.set('n', '<Leader>b', dap.toggle_breakpoint)
     vim.keymap.set('n', '<Leader>B', dap.clear_breakpoints)
@@ -57,6 +48,13 @@ return {
     local dapui = require("dapui")
     dapui.setup({
       layouts = {
+        {
+          elements = {
+            'console',
+          },
+          size = 8,
+          position = 'top',
+        },
         {
           elements = {
             'scopes',
