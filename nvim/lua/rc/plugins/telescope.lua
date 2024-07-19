@@ -12,7 +12,7 @@ return {
 
     telescope.setup({
       defaults = {
-        path_display = { "truncate " },
+        path_display = { " truncate " },
         mappings = {
           i = {
             ["<C-p>"] = actions.move_selection_previous, -- move to prev result
@@ -20,6 +20,7 @@ return {
             ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
           },
         },
+        dynamic_preview_title = true,
       },
     })
 

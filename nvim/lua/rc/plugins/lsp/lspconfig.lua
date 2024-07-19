@@ -29,49 +29,21 @@ return {
 
     local keymap = vim.keymap -- for conciseness
 
-    local opts = { noremap = true, silent = true }
-    local on_attach = function(client, bufnr)
-      opts.buffer = bufnr
-
+    local on_attach = function()
       -- set keybinds
-      opts.desc = "Show LSP references"
-      keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
-
-      opts.desc = "Go to declaration"
-      keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
-
-      opts.desc = "Show LSP definitions"
-      keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
-
-      opts.desc = "Show LSP implementations"
-      keymap.set("n", "<leader>gi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
-
-      opts.desc = "Show LSP type definitions"
-      keymap.set("n", "<leader>gt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
-
-      opts.desc = "See available code actions"
-      keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
-
-      opts.desc = "Smart rename"
-      keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
-
-      opts.desc = "Show buffer diagnostics"
-      keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
-
-      opts.desc = "Show line diagnostics"
-      keymap.set("n", "dg", vim.diagnostic.open_float, opts) -- show diagnostics for line
-
-      opts.desc = "Go to previous diagnostic"
-      keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
-
-      opts.desc = "Go to next diagnostic"
-      keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
-
-      opts.desc = "Show documentation for what is under cursor"
-      keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
-
-      opts.desc = "Restart LSP"
-      keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+      keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", { desc = "Show LSP references" })
+      keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" } )
+      keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", { desc = "Show LSP definitions" })
+      keymap.set("n", "<leader>gi", "<cmd>Telescope lsp_implementations<CR>", {desc = "Show LSP implementations" })
+      keymap.set("n", "<leader>gt", "<cmd>Telescope lsp_type_definitions<CR>", { desc = "Show LSP type definitions" })
+      keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "see available code actions, in visual mode will apply to selection" })
+      keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Smart rename" })
+      keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", { desc = "Show buffer diagnostics" })
+      keymap.set("n", "dg", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
+      keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
+      keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
+      keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show documentation for what is under cursor" })
+      keymap.set("n", "<leader>rs", ":LspRestart<CR>", { desc = "Restart LSP" })
     end
 
     -- used to enable autocompletion (assign to every lsp server config)
@@ -90,40 +62,33 @@ return {
     lspconfig["gopls"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
+      settings = {
+        gopls = {
+          buildFlags = {"-tags=wireinject"},
+        }
+      },
       cmd = {"gopls"},
       filetypes = { "go", "gomod", "gowork", "gotmpl" },
       root_dir = util.root_pattern("go.work", "go.mod", ".git"),
     })
-
-    -- configure json/js/ts server
-    lspconfig["biome"].setup({
+    local configs = require 'lspconfig/configs'
+    if not configs.golangcilsp then
+      configs.golangcilsp = {
+        default_config = {
+          cmd = {'golangci-lint-langserver'},
+          root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
+          init_options = {
+              command = { "golangci-lint", "run", "--enable-all", "--disable", "lll", "--out-format", "json", "--issues-exit-code=1" };
+          },
+        };
+      }
+    end
+    lspconfig["golangci_lint_ls"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
-    })
-
-    -- configure html server
-    lspconfig["html"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- configure css server
-    lspconfig["cssls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- configure emmet language server
-    lspconfig["emmet_ls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
-    })
-
-    -- configure python server
-    lspconfig["pyright"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
+      settings = {
+        filetypes = {'go', 'gomod'}
+      }
     })
 
     -- configure lua server (with special settings)
@@ -146,6 +111,24 @@ return {
         },
       },
     })
+
+    -- other
+    local others = {
+      "biome", -- json/js/ts
+      "tsserver", -- ts/js
+      "html", -- html
+      "cssls", -- css
+      "emmet_ls", -- emmet
+      "pyright", -- python
+      "solargraph", -- ruby
+      "terraformls", -- terraform
+    }
+    for _, s in ipairs(others) do
+      lspconfig[s].setup({
+          capabilities = capabilities,
+          on_attach = on_attach,
+      })
+    end
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
       border = "rounded",
     })
