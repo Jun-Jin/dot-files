@@ -27,7 +27,6 @@ return {
       -- list of servers for mason to install
       ensure_installed = {
         "gopls",
-        "biome",
         "html",
         "cssls",
         "lua_ls",
@@ -42,7 +41,6 @@ return {
       ensure_installed = {
         "stylua", -- lua formatter
         "pylint", -- python linter
-        "biome", -- js linter
       },
     })
   end,

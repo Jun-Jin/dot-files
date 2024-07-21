@@ -114,7 +114,6 @@ return {
 
     -- other
     local others = {
-      "biome", -- json/js/ts
       "tsserver", -- ts/js
       "html", -- html
       "cssls", -- css
