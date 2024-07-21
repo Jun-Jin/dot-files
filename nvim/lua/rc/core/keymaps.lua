@@ -20,5 +20,7 @@ keymap.set('i', 'jj', '<ESC>', { desc = "Escape with jj" })
 keymap.set('i', 'kk', '<ESC>la', { desc = "Escape and re-enter insert mode" })
 keymap.set('i', 'zz', '<ESC>zza', { desc = "Do \"zz\" and re-enter insert mode" })
 
--- keymap.set('v', 'J', ':m `>+1<CR>gv=gv', { desc = "a" })
--- keymap.set('v', 'K', ':m `>-2<CR>gv=gv', { desc = "a" })
+keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = "move selected visual block down"})
+keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = "move selected visual block up"})
+
+keymap.set('x', '<leader>p', '"_dP', { desc = "paste without overwriting clipboard" })
