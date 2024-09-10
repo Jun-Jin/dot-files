@@ -22,7 +22,7 @@ return {
         {
           -- Must be "go" or it will be ignored by the plugin
           type = "go",
-          name = "Debug test (go.mod)",
+          name = "Debug test (go.mod, OMEGA_ENV=test)",
           request = "launch",
           mode = "test",
           program = "./${relativeFileDirname}",
@@ -50,16 +50,9 @@ return {
       layouts = {
         {
           elements = {
-            'console',
-          },
-          size = 8,
-          position = 'top',
-        },
-        {
-          elements = {
             'scopes',
           },
-          size = 10,
+          size = 20,
           position = 'bottom',
         },
         {
@@ -67,7 +60,7 @@ return {
             'breakpoints',
             'stacks',
           },
-          size = 60,
+          size = 50,
           position = 'right',
         },
       },

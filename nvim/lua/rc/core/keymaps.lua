@@ -14,6 +14,7 @@ local keymap = vim.keymap -- for conciseness
 -- keymap('n', '<Space>', '<Nop>', { desc = "" })
 keymap.set('n', '<C-w><Space>', 'o<ESC>', { desc = "Add new line" })
 keymap.set('n', '<ESC><ESC>', ':nohl<CR>', { desc = "Turn off search highlight", silent = true })
+keymap.set('n', 'Y', 'y$', { desc = "Yank to end of line" })
 keymap.set('n', '~', '~h', { desc = "Don't continue" })
 
 keymap.set('i', 'jj', '<ESC>', { desc = "Escape with jj" })
@@ -24,3 +25,8 @@ keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = "move selected visual block do
 keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = "move selected visual block up"})
 
 keymap.set('x', '<leader>p', '"_dP', { desc = "paste without overwriting clipboard" })
+
+keymap.set('n', '<leader><C-g>', CopyBufferPathToClipboard, { desc = "Copy buffer path to clipboard" })
+
+-- Oil
+keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })

@@ -32,6 +32,8 @@ return {
         "lua_ls",
         "emmet_ls",
         "pyright",
+        "ruby_lsp",
+        "golangci_lint_ls",
       },
       -- auto-install configured servers (with lspconfig)
       automatic_installation = true, -- not the same as ensure_installed
@@ -40,7 +42,6 @@ return {
     mason_tool_installer.setup({
       ensure_installed = {
         "stylua", -- lua formatter
-        "pylint", -- python linter
       },
     })
   end,

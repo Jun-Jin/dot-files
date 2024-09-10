@@ -8,6 +8,7 @@ return {
   config = function()
     -- import lspconfig plugin
     local lspconfig = require("lspconfig")
+    -- vim.lsp.set_log_level("debug")
 
     vim.diagnostic.config({
       virtual_text = false, -- disable virtual text
@@ -18,7 +19,6 @@ return {
         focusable = true,
         style = "minimal",
         border = "rounded",
-        source = "always",
         header = "",
         prefix = "",
       },
@@ -29,7 +29,7 @@ return {
 
     local keymap = vim.keymap -- for conciseness
 
-    local on_attach = function()
+    local on_attach = function(_, _)
       -- set keybinds
       keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", { desc = "Show LSP references" })
       keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" } )
@@ -78,17 +78,32 @@ return {
           cmd = {'golangci-lint-langserver'},
           root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
           init_options = {
-              command = { "golangci-lint", "run", "--enable-all", "--disable", "lll", "--out-format", "json", "--issues-exit-code=1" };
+          command = { "golangci-lint", "run", "--disable", "lll", "--out-format", "json", "--issues-exit-code=1" },
           },
         };
       }
     end
     lspconfig["golangci_lint_ls"].setup({
-      capabilities = capabilities,
       on_attach = on_attach,
-      settings = {
-        filetypes = {'go', 'gomod'}
-      }
+      capabilities = vim.lsp.protocol.make_client_capabilities(),
+      handlers = {
+        ["window/showMessage"] = function(_, result, ctx)
+          local client = vim.lsp.get_client_by_id(ctx.client_id)
+          if client then
+            print("LSP message from " .. client.name .. ": " .. result.message)
+          else
+            print("LSP message: " .. result.message)
+          end
+        end,
+        ["window/logMessage"] = function(_, result, ctx)
+          local client = vim.lsp.get_client_by_id(ctx.client_id)
+          if client then
+            print("LSP log from " .. client.name .. ": " .. result.message)
+          else
+            print("LSP log: " .. result.message)
+          end
+        end,
+      },
     })
 
     -- configure lua server (with special settings)
@@ -119,7 +134,7 @@ return {
       "cssls", -- css
       "emmet_ls", -- emmet
       "pyright", -- python
-      "solargraph", -- ruby
+      "ruby_lsp", -- ruby
       "terraformls", -- terraform
     }
     for _, s in ipairs(others) do
@@ -137,6 +152,10 @@ return {
   autocmd("BufWritePre", {
     pattern = "*.go",
     callback = function()
+      -- alternative, but now work
+      -- vim.cmd('LspDocumentFormatSync')
+      -- vim.cmd('LspCodeActionSync source.organizeImports')
+
       local params = vim.lsp.util.make_range_params()
       params.context = {only = {"source.organizeImports"}}
       -- buf_request_sync defaults to a 1000ms timeout. Depending on your

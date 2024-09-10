@@ -12,22 +12,29 @@ return {
 
     telescope.setup({
       defaults = {
-        path_display = { " truncate " },
+        path_display = { "truncate" },
         mappings = {
           i = {
-            ["<C-p>"] = actions.move_selection_previous, -- move to prev result
-            ["<C-n>"] = actions.move_selection_next, -- move to next result
+            ["<C-p>"] = actions.move_selection_previous,
+            ["<C-n>"] = actions.move_selection_next,
             ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
           },
         },
+        layout_strategy = "vertical",
         dynamic_preview_title = true,
+        layout_config = {
+          vertical = {
+            width = 0.9,
+          },
+          preview_cutoff = 1,
+          preview_height = 15,
+        },
       },
     })
 
     telescope.load_extension("fzf")
 
-    -- set keymaps
-    local keymap = vim.keymap -- for conciseness
+    local keymap = vim.keymap
 
     keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy find files in cwd" })
     keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
