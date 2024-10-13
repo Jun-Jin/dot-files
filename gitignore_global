@@ -7,3 +7,4 @@ syntax: glob
 .lesshst
 .DS_Store
 .config*
+supervisord.*

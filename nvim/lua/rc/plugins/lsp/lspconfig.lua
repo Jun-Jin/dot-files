@@ -8,7 +8,6 @@ return {
   config = function()
     -- import lspconfig plugin
     local lspconfig = require("lspconfig")
-    -- vim.lsp.set_log_level("debug")
 
     vim.diagnostic.config({
       virtual_text = false, -- disable virtual text
@@ -30,15 +29,16 @@ return {
     local keymap = vim.keymap -- for conciseness
 
     local on_attach = function(_, _)
+      local telescope_builtin = require('telescope.builtin')
       -- set keybinds
-      keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", { desc = "Show LSP references" })
+      keymap.set("n", "gR", telescope_builtin.lsp_references, { desc = "Show LSP references" })
       keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" } )
-      keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", { desc = "Show LSP definitions" })
-      keymap.set("n", "<leader>gi", "<cmd>Telescope lsp_implementations<CR>", {desc = "Show LSP implementations" })
-      keymap.set("n", "<leader>gt", "<cmd>Telescope lsp_type_definitions<CR>", { desc = "Show LSP type definitions" })
+      keymap.set("n", "gd", telescope_builtin.lsp_definitions, { desc = "Show LSP definitions" })
+      keymap.set("n", "<leader>gi", telescope_builtin.lsp_implementations, {desc = "Show LSP implementations" })
+      keymap.set("n", "<leader>gt", telescope_builtin.lsp_type_definitions, { desc = "Show LSP type definitions" })
       keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "see available code actions, in visual mode will apply to selection" })
       keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Smart rename" })
-      keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", { desc = "Show buffer diagnostics" })
+      keymap.set("n", "<leader>D", function() telescope_builtin.diagnostics({ bufnr=0 }) end, { desc = "Show buffer diagnostics" })
       keymap.set("n", "dg", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
       keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
       keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
@@ -51,7 +51,6 @@ return {
     local util = require("lspconfig/util")
 
     -- Change the Diagnostic symbols in the sign column (gutter)
-    -- (not in youtube nvim video)
     local signs = { Error = "E", Warn = "W", Hint = "H", Info = "I" }
     for type, icon in pairs(signs) do
       local hl = "DiagnosticSign" .. type
@@ -86,24 +85,6 @@ return {
     lspconfig["golangci_lint_ls"].setup({
       on_attach = on_attach,
       capabilities = vim.lsp.protocol.make_client_capabilities(),
-      handlers = {
-        ["window/showMessage"] = function(_, result, ctx)
-          local client = vim.lsp.get_client_by_id(ctx.client_id)
-          if client then
-            print("LSP message from " .. client.name .. ": " .. result.message)
-          else
-            print("LSP message: " .. result.message)
-          end
-        end,
-        ["window/logMessage"] = function(_, result, ctx)
-          local client = vim.lsp.get_client_by_id(ctx.client_id)
-          if client then
-            print("LSP log from " .. client.name .. ": " .. result.message)
-          else
-            print("LSP log: " .. result.message)
-          end
-        end,
-      },
     })
 
     -- configure lua server (with special settings)
@@ -129,12 +110,11 @@ return {
 
     -- other
     local others = {
-      "tsserver", -- ts/js
+      "ts_ls", -- ts/js
       "html", -- html
       "cssls", -- css
       "emmet_ls", -- emmet
       "pyright", -- python
-      "ruby_lsp", -- ruby
       "terraformls", -- terraform
     }
     for _, s in ipairs(others) do
