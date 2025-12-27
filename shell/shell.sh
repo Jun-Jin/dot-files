@@ -6,12 +6,14 @@ alias ll="ls -laG"
 # application
 alias ni="nvim"
 alias niew="nvim -R"
-alias p3="python3"
+alias p3="python3.10"
 
 # location
 alias cdc="cd ~/.config"
 alias cdw="cd ~/works"
 alias cdwj="cd ~/works/jun-jin"
+alias cdwi="cd ~/works/infigate"
+alias cdwis="cd ~/works/infigate/simulation"
 alias cdi="cd ~/works/infigate"
 alias cdia="cd ~/works/infigate/arent"
 alias cdiaa="cd ~/works/infigate/arent/arent-frontend"
